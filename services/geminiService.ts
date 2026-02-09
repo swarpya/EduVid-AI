@@ -132,13 +132,17 @@ export const generateBranchScript = async (context: string, question: string): P
     }
   };
 
-export const askQuestion = async (context: string, question: string): Promise<string> => {
-    const prompt = `You are a helpful educational assistant.
-    Current Slide Narration: "${context}"
+export const askQuestion = async (topic: string, context: string, question: string): Promise<string> => {
+    const prompt = `You are a strict educational assistant for a lesson about "${topic}".
+    
+    Current Slide Context: "${context}"
     User Question: "${question}"
     
-    Answer the question concisely in 2-3 sentences. 
-    Do not offer to generate images, just answer the question in text.`;
+    Instructions:
+    1. STRICTLY evaluate if the User Question is relevant to the topic "${topic}" or the current slide context.
+    2. If the question is irrelevant (e.g., asking about sports, weather, or personal opinions unrelated to "${topic}"), reply with this exact formal phrase: "I apologize, but this question is not relevant to the current educational topic. Please ask a question related to the lesson."
+    3. If the question IS relevant, answer it concisely in 2-3 sentences.
+    4. Do not offer to generate images, just answer in text.`;
     
     try {
         const response = await ai.models.generateContent({

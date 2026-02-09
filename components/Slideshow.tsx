@@ -168,13 +168,16 @@ const Slideshow: React.FC<SlideshowProps> = ({ slides, scriptTitle, onReset, onV
         setAutoPlay(false);
     }
 
-    const answer = await askQuestion(currentSlide.narration, userQuestion);
+    const answer = await askQuestion(scriptTitle, currentSlide.narration, userQuestion);
     
+    // Check if the answer is the irrelevant template response to disable visualization
+    const isIrrelevant = answer.includes("I apologize, but this question is not relevant");
+
     setIsTyping(false);
     setChatHistory(prev => [...prev, { 
         role: 'ai', 
         text: answer, 
-        canVisualize: true 
+        canVisualize: !isIrrelevant 
     }]);
   };
 
